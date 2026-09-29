@@ -1,5 +1,10 @@
 name: Foundry
 
+# The workflow only builds and tests; declare read-only so no step inherits a
+# write-capable token.
+permissions:
+  contents: read
+
 on:
   push:
     branches:
@@ -14,16 +19,20 @@ concurrency:
 jobs:
   fmt:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
-      - uses: actions/checkout@v5
-      - uses: foundry-rs/foundry-toolchain@v1
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+      - uses: foundry-rs/foundry-toolchain@908c540300062bd5a7e473851cdb4282204cee09 # v1
       - run: forge fmt --check
 
   test:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
-      - uses: actions/checkout@v5
-      - uses: foundry-rs/foundry-toolchain@v1
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+      - uses: foundry-rs/foundry-toolchain@908c540300062bd5a7e473851cdb4282204cee09 # v1
       - run: forge test -vvv
         env:
           FOUNDRY_FUZZ_RUNS: 10000
